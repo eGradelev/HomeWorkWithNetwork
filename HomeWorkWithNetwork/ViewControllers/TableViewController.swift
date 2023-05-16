@@ -25,6 +25,7 @@ final class TableViewController: UITableViewController {
 
 
 }
+// MARK: - Networking
 extension TableViewController {
     private func fetchAnimeFacts () {
         URLSession.shared.dataTask(with: DisneyApi.baseURL.url) {data, _, error in
@@ -38,7 +39,7 @@ extension TableViewController {
                 let animeFacts = try decoder.decode(DisneyCharacters.self, from: data)
                 print(animeFacts)
             } catch {
-                print(error)
+                print(error.localizedDescription)
             }
         }.resume()
     }
