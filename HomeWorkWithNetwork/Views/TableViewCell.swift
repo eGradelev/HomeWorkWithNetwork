@@ -12,6 +12,8 @@ final class TableViewCell: UITableViewCell {
     //MARK: - IBOutlets
     @IBOutlet weak var characterImage: UIImageView! {
         didSet {
+            characterImage.contentMode = .scaleAspectFit
+            characterImage.clipsToBounds = true
             characterImage.layer.cornerRadius = characterImage.frame.height / 2
         }
     }

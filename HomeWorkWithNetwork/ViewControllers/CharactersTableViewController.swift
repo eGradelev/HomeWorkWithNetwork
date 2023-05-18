@@ -17,8 +17,9 @@ final class CharactersTableViewController: UITableViewController {
     //MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.rowHeight = 100
         
-        fetchDisneyCharacters()
+        fetchData(from: DisneyApi.baseURL.url)
     }
     
 
@@ -30,15 +31,24 @@ final class CharactersTableViewController: UITableViewController {
         guard let detailVC = segue.destination as? CharacterDetailsViewController else { return }
         detailVC.character = character
     }
+    //MARK: - IB Actions
+    
+    @IBAction func updateData(_ sender: UIBarButtonItem) {
+        sender.tag == 1
+        ? fetchData(from: disneyCharacters?.info.nextPage)
+        : fetchData(from: disneyCharacters?.info.previousPage)
+    }
     
 }
 // MARK: - Networking
 extension CharactersTableViewController {
-    private func fetchDisneyCharacters () {
-        networkManager.fetch(DisneyCharacters.self, from: DisneyApi.baseURL.url) { result in
+    private func fetchData(from url: URL?) {
+        networkManager.fetch(DisneyCharacters.self, from: url) { [weak self] result in
             switch result {
-            case .success(let characters):
-                print(characters)
+            case .success(let disneyCharacters):
+                print(disneyCharacters)
+                self?.disneyCharacters = disneyCharacters
+                self?.tableView.reloadData()
             case .failure(let error):
                 print(error)
             }
@@ -55,10 +65,9 @@ extension CharactersTableViewController{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell", for: indexPath)
-        var content = cell.defaultContentConfiguration()
-        
-        
-        
+        guard let cell = cell as? TableViewCell else { return UITableViewCell() }
+        let character = disneyCharacters?.data[indexPath.row]
+        cell.configure(with: character)
         return cell
     }
 }
