@@ -12,6 +12,7 @@ final class CharactersTableViewController: UITableViewController {
     //MARK: - Private properties
     private let networkManager = NetworkManager.shared
     private var disneyCharacters: DisneyCharacters?
+    private var chosenCharacter: [Character] = []
     
     //MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -20,21 +21,14 @@ final class CharactersTableViewController: UITableViewController {
         fetchDisneyCharacters()
     }
     
-//MARK: - UITableViewDataSource
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        disneyCharacters?.data.count ?? 0
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell", for: indexPath)
-        
-        return cell
-    }
+
     
 //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = tableView.indexPathForSelectedRow else { return }
-        
+        let character = chosenCharacter[indexPath.row]
+        guard let detailVC = segue.destination as? CharacterDetailsViewController else { return }
+        detailVC.character = character
     }
     
 }
@@ -49,5 +43,22 @@ extension CharactersTableViewController {
                 print(error)
             }
         }
+    }
+}
+
+
+//MARK: - UITableViewDataSource
+extension CharactersTableViewController{
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        disneyCharacters?.data.count ?? 0
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell", for: indexPath)
+        var content = cell.defaultContentConfiguration()
+        
+        
+        
+        return cell
     }
 }
