@@ -31,7 +31,7 @@ struct Character: Decodable {
     let imageUrl: URL
     let url: URL
     
-    var description: String{
+    var description: String {
         """
     Name: \(name)
     Films: \(films)
@@ -49,7 +49,7 @@ enum DisneyApi {
     var url: URL {
         switch self {
         case .baseURL:
-            return URL(string: "https://api.disneyapi.dev/character")!
+            return URL(string: "http://api.disneyapi.dev/character")!
         }
     }
 }

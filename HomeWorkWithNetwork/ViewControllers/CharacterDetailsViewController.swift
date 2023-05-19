@@ -12,7 +12,7 @@ class CharacterDetailsViewController: UIViewController {
     //MARK: - IBOutlets
     @IBOutlet weak var characterImage: UIImageView! {
         didSet {
-            characterImage.layer.cornerRadius = characterImage.frame.height / 2
+          //  characterImage.layer.cornerRadius = characterImage.frame.height / 2
         }
     }
     @IBOutlet weak var descriptionLabel: UILabel!

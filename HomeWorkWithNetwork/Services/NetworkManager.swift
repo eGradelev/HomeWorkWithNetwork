@@ -23,15 +23,15 @@ final class NetworkManager {
             completion(.failure(.invalidURL))
             return
         }
+
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data else {
                 completion(.failure(.noData))
                 print(error?.localizedDescription ?? "No error description")
                 return
             }
-            
             do {
-                let decoder = JSONDecoder ()
+                let decoder = JSONDecoder()
                 let dataModel = try decoder.decode(T.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(dataModel))
@@ -39,7 +39,6 @@ final class NetworkManager {
             } catch {
                 completion(.failure(.decodingError))
             }
-            
         }.resume()
     }
     

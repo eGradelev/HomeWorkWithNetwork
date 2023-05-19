@@ -22,31 +22,27 @@ final class CharactersTableViewController: UITableViewController {
         fetchData(from: DisneyApi.baseURL.url)
     }
     
-
-    
-//MARK: - Navigation
+    //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = tableView.indexPathForSelectedRow else { return }
-        let character = chosenCharacter[indexPath.row]
         guard let detailVC = segue.destination as? CharacterDetailsViewController else { return }
-        detailVC.character = character
+        detailVC.character = disneyCharacters?.data[indexPath.row]
     }
-    //MARK: - IB Actions
     
+    //MARK: - IB Actions
     @IBAction func updateData(_ sender: UIBarButtonItem) {
         sender.tag == 1
         ? fetchData(from: disneyCharacters?.info.nextPage)
         : fetchData(from: disneyCharacters?.info.previousPage)
     }
-    
 }
-// MARK: - Networking
+
+    // MARK: - Networking
 extension CharactersTableViewController {
     private func fetchData(from url: URL?) {
         networkManager.fetch(DisneyCharacters.self, from: url) { [weak self] result in
             switch result {
             case .success(let disneyCharacters):
-                print(disneyCharacters)
                 self?.disneyCharacters = disneyCharacters
                 self?.tableView.reloadData()
             case .failure(let error):
@@ -56,8 +52,7 @@ extension CharactersTableViewController {
     }
 }
 
-
-//MARK: - UITableViewDataSource
+    //MARK: - UITableViewDataSource
 extension CharactersTableViewController{
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         disneyCharacters?.data.count ?? 0
